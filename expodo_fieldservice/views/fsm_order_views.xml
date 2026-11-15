@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fsm_order_form" model="ir.ui.view">
+        <field name="name">expodo.fsm.order.form</field>
+        <field name="model">expodo.fsm.order</field>
+        <field name="arch" type="xml">
+            <form string="Intervention">
+                <header>
+                    <button name="action_start" type="object" string="Start"
+                            class="btn-primary"/>
+                    <button name="action_finish" type="object" string="Finish"/>
+                    <button name="action_invoice" type="object" string="Create Invoice"
+                            class="btn-primary" invisible="invoice_state == 'invoiced'"/>
+                    <button name="action_view_invoice" type="object" string="View Invoice"
+                            invisible="invoice_state != 'invoiced'"/>
+                    <field name="stage_id" widget="statusbar"
+                           options="{'clickable': 1}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title d-flex align-items-center gap-3">
+                        <h1 class="m-0"><field name="name" readonly="1"/></h1>
+                        <field name="priority" widget="priority"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="partner_shipping_id"/>
+                            <field name="fsm_type_id"/>
+                        </group>
+                        <group>
+                            <field name="technician_id"/>
+                            <field name="date_planned"/>
+                            <field name="invoice_state"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Services" name="time">
+                            <field name="line_time_ids">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="hours"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Parts" name="parts">
+                            <field name="line_part_ids">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="amount_time"/>
+                                <field name="amount_parts"/>
+                                <field name="amount_total"/>
+                            </group>
+                        </page>
+                        <page string="Checklist" name="checklist">
+                            <field name="task_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="done"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Execution" name="execution">
+                            <group>
+                                <group>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="duration"/>
+                                </group>
+                                <group>
+                                    <field name="signed_by"/>
+                                    <field name="signed_on"/>
+                                </group>
+                            </group>
+                            <field name="signature" widget="image"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_fsm_order_list" model="ir.ui.view">
+        <field name="name">expodo.fsm.order.list</field>
+        <field name="model">expodo.fsm.order</field>
+        <field name="arch" type="xml">
+            <list string="Interventions">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="fsm_type_id"/>
+                <field name="technician_id"/>
+                <field name="date_planned"/>
+                <field name="stage_id"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="invoice_state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fsm_order_kanban" model="ir.ui.view">
+        <field name="name">expodo.fsm.order.kanban</field>
+        <field name="model">expodo.fsm.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id">
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <strong class="fs-6"><field name="name"/></strong>
+                            <field name="priority" widget="priority"/>
+                        </div>
+                        <div class="text-truncate"><field name="partner_id"/></div>
+                        <span class="text-muted"><field name="fsm_type_id"/></span>
+                        <div class="mt-2 d-flex justify-content-between align-items-center">
+                            <strong><field name="amount_total" widget="monetary"/></strong>
+                            <field name="technician_id" widget="many2one_avatar_user"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_fsm_order_calendar" model="ir.ui.view">
+        <field name="name">expodo.fsm.order.calendar</field>
+        <field name="model">expodo.fsm.order</field>
+        <field name="arch" type="xml">
+            <calendar string="Planning" date_start="date_planned"
+                      color="technician_id" mode="month">
+                <field name="partner_id"/>
+                <field name="technician_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_fsm_order_search" model="ir.ui.view">
+        <field name="name">expodo.fsm.order.search</field>
+        <field name="model">expodo.fsm.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="technician_id"/>
+                <filter string="My Interventions" name="my"
+                        domain="[('technician_id', '=', uid)]"/>
+                <filter string="To Invoice" name="to_invoice"
+                        domain="[('invoice_state', '=', 'to_invoice')]"/>
+                <separator/>
+                <filter string="Open" name="open"
+                        domain="[('is_closed', '=', False)]"/>
+                <separator/>
+                    <filter string="Stage" name="group_stage"
+                            context="{'group_by': 'stage_id'}"/>
+                    <filter string="Technician" name="group_tech"
+                            context="{'group_by': 'technician_id'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by': 'fsm_type_id'}"/>
+                    <filter string="Customer" name="group_partner"
+                            context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_fsm_order" model="ir.actions.act_window">
+        <field name="name">Interventions</field>
+        <field name="res_model">expodo.fsm.order</field>
+        <field name="view_mode">list,kanban,form,calendar,activity</field>
+        <field name="search_view_id" ref="view_fsm_order_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first intervention</p>
+        </field>
+    </record>
+</odoo>

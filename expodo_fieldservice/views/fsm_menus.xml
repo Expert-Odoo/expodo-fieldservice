@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_root_fsm" name="Field Service" sequence="50"
+              groups="group_fsm_technician"/>
+
+    <menuitem id="menu_fsm_order" name="Interventions"
+              parent="menu_root_fsm" action="action_fsm_order" sequence="10"/>
+
+    <menuitem id="menu_fsm_config" name="Configuration"
+              parent="menu_root_fsm" sequence="90"
+              groups="group_fsm_manager"/>
+
+    <menuitem id="menu_fsm_type" name="Intervention Types"
+              parent="menu_fsm_config" action="action_fsm_type" sequence="10"/>
+
+    <menuitem id="menu_fsm_stage" name="Stages"
+              parent="menu_fsm_config" action="action_fsm_stage" sequence="20"/>
+</odoo>

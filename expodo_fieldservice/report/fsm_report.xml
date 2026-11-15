@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_fsm_order" model="ir.actions.report">
+        <field name="name">Intervention Report</field>
+        <field name="model">expodo.fsm.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">expodo_fieldservice.report_fsm_order</field>
+        <field name="report_file">expodo_fieldservice.report_fsm_order</field>
+        <field name="binding_model_id" ref="model_expodo_fsm_order"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

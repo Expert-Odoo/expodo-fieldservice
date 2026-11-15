@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_fsm_type_form" model="ir.ui.view">
+        <field name="name">expodo.fsm.type.form</field>
+        <field name="model">expodo.fsm.type</field>
+        <field name="arch" type="xml">
+            <form string="Intervention Type">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Annual maintenance"/></h1>
+                    </div>
+                    <group>
+                        <field name="active"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <notebook>
+                        <page string="Default Checklist" name="checklist">
+                            <field name="checklist_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_fsm_type_list" model="ir.ui.view">
+        <field name="name">expodo.fsm.type.list</field>
+        <field name="model">expodo.fsm.type</field>
+        <field name="arch" type="xml">
+            <list string="Intervention Types">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_fsm_type" model="ir.actions.act_window">
+        <field name="name">Intervention Types</field>
+        <field name="res_model">expodo.fsm.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

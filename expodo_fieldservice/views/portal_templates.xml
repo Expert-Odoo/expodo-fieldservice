@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_fsm" name="Portal My Home: Field Service"
+              inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Interventions</t>
+                <t t-set="url" t-value="'/my/interventions'"/>
+                <t t-set="config_card" t-value="True"/>
+                <t t-set="count" t-value="fsm_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_interventions" name="My Interventions">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Reference</th>
+                        <th>Type</th>
+                        <th>Planned</th>
+                        <th>Stage</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="interventions" t-as="o">
+                        <td><a t-attf-href="/my/intervention/#{o.id}"><span t-field="o.name"/></a></td>
+                        <td><span t-field="o.fsm_type_id"/></td>
+                        <td><span t-field="o.date_planned"/></td>
+                        <td><span t-field="o.stage_id"/></td>
+                        <td class="text-end"><span t-field="o.amount_total"/></td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_intervention" name="Intervention">
+        <t t-call="portal.portal_layout">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Intervention <span t-field="intervention.name"/></h3>
+                    <p>
+                        <strong>Type:</strong> <span t-field="intervention.fsm_type_id"/><br/>
+                        <strong>Stage:</strong> <span t-field="intervention.stage_id"/><br/>
+                        <strong>Planned:</strong> <span t-field="intervention.date_planned"/><br/>
+                        <strong>Technician:</strong> <span t-field="intervention.technician_id"/>
+                    </p>
+                    <h5>Services</h5>
+                    <table class="table table-sm">
+                        <tr t-foreach="intervention.line_time_ids" t-as="l">
+                            <td><span t-field="l.name"/></td>
+                            <td class="text-end"><span t-field="l.hours"/> h</td>
+                            <td class="text-end"><span t-field="l.price_subtotal"/></td>
+                        </tr>
+                    </table>
+                    <h5>Parts</h5>
+                    <table class="table table-sm">
+                        <tr t-foreach="intervention.line_part_ids" t-as="p">
+                            <td><span t-field="p.product_id"/></td>
+                            <td class="text-end"><span t-field="p.quantity"/></td>
+                            <td class="text-end"><span t-field="p.price_subtotal"/></td>
+                        </tr>
+                    </table>
+                    <p class="text-end"><strong>Total: </strong><span t-field="intervention.amount_total"/></p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
