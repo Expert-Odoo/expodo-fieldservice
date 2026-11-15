@@ -89,7 +89,7 @@ class FsmOrder(models.Model):
         return self.env["expodo.fsm.stage"].search([], order="sequence, id", limit=1)
 
     @api.model
-    def _read_group_stage_ids(self, stages, domain):
+    def _read_group_stage_ids(self, stages, domain, order=None):
         return self.env["expodo.fsm.stage"].search([], order="sequence, id")
 
     @api.depends("date_start", "date_end")
