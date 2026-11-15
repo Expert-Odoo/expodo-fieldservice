@@ -6,7 +6,7 @@ Plan interventions, assign a technician, track time and parts, invoice directly,
 and let customers follow their interventions on the portal.
 
 - License: LGPL-3
-- Odoo: 19.0 Community
+- Odoo: 18.0 Community
 - Author: Expodo (https://expodo.fr)
 
-One branch per Odoo version. This branch targets Odoo 19.0.
+One branch per Odoo version. This branch targets Odoo 18.0.
