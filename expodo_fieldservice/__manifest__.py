@@ -2,7 +2,7 @@
     "name": "Expodo Field Service",
     "summary": "Field service and intervention management: orders, planning, invoicing, portal",
     "description": "Generic field service / work order engine for Odoo Community. Plan interventions, assign a technician, track time and parts, invoice directly, and let customers follow their interventions on the portal.",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Services/Field Service",
     "license": "LGPL-3",
     "author": "Expodo",
@@ -15,7 +15,6 @@
     ],
     "data": [
         "security/fsm_security.xml",
-        "security/ir.model.access.csv",
         "data/fsm_data.xml",
         "views/fsm_stage_views.xml",
         "views/fsm_type_views.xml",

@@ -39,40 +39,128 @@
             <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
-        <record id="rule_fsm_order_technician_own" model="ir.rule">
+        <!-- ================= Access (Odoo 20 ir.access) ================= -->
+
+        <!-- Intervention orders -->
+        <record id="access_fsm_order_tech" model="ir.access">
             <field name="name">FSM Order: technician own</field>
             <field name="model_id" ref="model_expodo_fsm_order"/>
-            <field name="groups" eval="[(4, ref('group_fsm_technician'))]"/>
-            <field name="domain_force">[('technician_id', '=', user.id)]</field>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
+            <field name="group_id" ref="group_fsm_technician"/>
+            <field name="operation">cru</field>
+            <field name="domain">[('technician_id', '=', user.id)]</field>
         </record>
 
-        <record id="rule_fsm_order_planner_all" model="ir.rule">
+        <record id="access_fsm_order_planner" model="ir.access">
             <field name="name">FSM Order: planner all</field>
             <field name="model_id" ref="model_expodo_fsm_order"/>
-            <field name="groups" eval="[(4, ref('group_fsm_planner'))]"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="group_id" ref="group_fsm_planner"/>
+            <field name="operation">cru</field>
         </record>
 
-        <record id="rule_fsm_order_company" model="ir.rule">
-            <field name="name">FSM Order: multi-company</field>
+        <record id="access_fsm_order_manager" model="ir.access">
+            <field name="name">FSM Order: manager all</field>
             <field name="model_id" ref="model_expodo_fsm_order"/>
-            <field name="global" eval="True"/>
-            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+            <field name="group_id" ref="group_fsm_manager"/>
+            <field name="operation">crud</field>
         </record>
 
-        <record id="rule_fsm_order_portal" model="ir.rule">
+        <record id="access_fsm_order_portal" model="ir.access">
             <field name="name">FSM Order: portal own</field>
             <field name="model_id" ref="model_expodo_fsm_order"/>
-            <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
-            <field name="domain_force">[('partner_id', '=', user.partner_id.commercial_partner_id.id)]</field>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
+            <field name="group_id" ref="base.group_portal"/>
+            <field name="operation">r</field>
+            <field name="domain">[('partner_id', '=', user.partner_id.commercial_partner_id.id)]</field>
+        </record>
+
+        <record id="access_fsm_order_company" model="ir.access">
+            <field name="name">FSM Order: multi-company</field>
+            <field name="model_id" ref="model_expodo_fsm_order"/>
+            <field name="operation">crud</field>
+            <field name="domain">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- Time lines -->
+        <record id="access_fsm_time_tech" model="ir.access">
+            <field name="name">FSM Time: technician</field>
+            <field name="model_id" ref="model_expodo_fsm_order_line_time"/>
+            <field name="group_id" ref="group_fsm_technician"/>
+            <field name="operation">crud</field>
+        </record>
+        <record id="access_fsm_time_portal" model="ir.access">
+            <field name="name">FSM Time: portal</field>
+            <field name="model_id" ref="model_expodo_fsm_order_line_time"/>
+            <field name="group_id" ref="base.group_portal"/>
+            <field name="operation">r</field>
+        </record>
+
+        <!-- Part lines -->
+        <record id="access_fsm_part_tech" model="ir.access">
+            <field name="name">FSM Part: technician</field>
+            <field name="model_id" ref="model_expodo_fsm_order_line_part"/>
+            <field name="group_id" ref="group_fsm_technician"/>
+            <field name="operation">crud</field>
+        </record>
+        <record id="access_fsm_part_portal" model="ir.access">
+            <field name="name">FSM Part: portal</field>
+            <field name="model_id" ref="model_expodo_fsm_order_line_part"/>
+            <field name="group_id" ref="base.group_portal"/>
+            <field name="operation">r</field>
+        </record>
+
+        <!-- Checklist tasks -->
+        <record id="access_fsm_task_tech" model="ir.access">
+            <field name="name">FSM Task: technician</field>
+            <field name="model_id" ref="model_expodo_fsm_order_task"/>
+            <field name="group_id" ref="group_fsm_technician"/>
+            <field name="operation">crud</field>
+        </record>
+        <record id="access_fsm_task_portal" model="ir.access">
+            <field name="name">FSM Task: portal</field>
+            <field name="model_id" ref="model_expodo_fsm_order_task"/>
+            <field name="group_id" ref="base.group_portal"/>
+            <field name="operation">r</field>
+        </record>
+
+        <!-- Stages -->
+        <record id="access_fsm_stage_tech" model="ir.access">
+            <field name="name">FSM Stage: technician</field>
+            <field name="model_id" ref="model_expodo_fsm_stage"/>
+            <field name="group_id" ref="group_fsm_technician"/>
+            <field name="operation">r</field>
+        </record>
+        <record id="access_fsm_stage_manager" model="ir.access">
+            <field name="name">FSM Stage: manager</field>
+            <field name="model_id" ref="model_expodo_fsm_stage"/>
+            <field name="group_id" ref="group_fsm_manager"/>
+            <field name="operation">crud</field>
+        </record>
+
+        <!-- Types -->
+        <record id="access_fsm_type_tech" model="ir.access">
+            <field name="name">FSM Type: technician</field>
+            <field name="model_id" ref="model_expodo_fsm_type"/>
+            <field name="group_id" ref="group_fsm_technician"/>
+            <field name="operation">r</field>
+        </record>
+        <record id="access_fsm_type_manager" model="ir.access">
+            <field name="name">FSM Type: manager</field>
+            <field name="model_id" ref="model_expodo_fsm_type"/>
+            <field name="group_id" ref="group_fsm_manager"/>
+            <field name="operation">crud</field>
+        </record>
+
+        <!-- Type checklist templates -->
+        <record id="access_fsm_type_cl_tech" model="ir.access">
+            <field name="name">FSM Type Checklist: technician</field>
+            <field name="model_id" ref="model_expodo_fsm_type_checklist"/>
+            <field name="group_id" ref="group_fsm_technician"/>
+            <field name="operation">r</field>
+        </record>
+        <record id="access_fsm_type_cl_manager" model="ir.access">
+            <field name="name">FSM Type Checklist: manager</field>
+            <field name="model_id" ref="model_expodo_fsm_type_checklist"/>
+            <field name="group_id" ref="group_fsm_manager"/>
+            <field name="operation">crud</field>
         </record>
 
     </data>
