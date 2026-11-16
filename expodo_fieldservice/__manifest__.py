@@ -25,6 +25,7 @@
         "views/portal_templates.xml",
     ],
     "application": True,
+    "images": ["static/description/banner.png", "static/description/icon.png"],
     "installable": True,
     "auto_install": False,
 }
