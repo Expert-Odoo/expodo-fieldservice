@@ -102,6 +102,21 @@
         </field>
     </record>
 
+    <record id="view_fsm_order_form_addons" model="ir.ui.view">
+        <field name="name">expodo.fsm.order.form.addons</field>
+        <field name="model">expodo.fsm.order</field>
+        <field name="inherit_id" ref="view_fsm_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='notes']" position="after">
+                <page string="Add-ons" name="addons">
+                    <field name="addons_promo_html" nolabel="1" readonly="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+
     <record id="view_fsm_order_list" model="ir.ui.view">
         <field name="name">expodo.fsm.order.list</field>
         <field name="model">expodo.fsm.order</field>
