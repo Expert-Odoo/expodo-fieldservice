@@ -200,3 +200,37 @@ class FsmOrder(models.Model):
             "view_mode": "form",
             "target": "current",
         }
+
+    addons_promo_html = fields.Html(
+        string="Add-ons", compute="_compute_addons_promo_html", sanitize=False,
+    )
+
+    def _compute_addons_promo_html(self):
+        import odoo.release
+        series = "%s.0" % odoo.release.version_info[0]
+        addons = [
+            ("Service Team", "Put several technicians on one intervention.", "expodo_fsm_team"),
+            ("Quotation before work", "Send a quote, turn it into an intervention once approved.", "expodo_fsm_sale"),
+            ("Planning &amp; Dispatch", "Schedule and assign your team from one board.", "expodo_fsm_planning"),
+            ("Service Contracts", "Recurring maintenance raised automatically.", "expodo_fsm_contract"),
+            ("Parts &amp; Stock", "Pull parts straight from inventory.", "expodo_fsm_stock"),
+            ("Online Booking", "Let customers request a visit from your website.", "expodo_fsm_portal_booking"),
+            ("Timesheets", "Log time into Odoo Timesheets, no double entry.", "expodo_fsm_timesheet"),
+        ]
+        rows = ""
+        for name, benefit, tech in addons:
+            rows += (
+                '<div class="d-flex align-items-center py-2 border-bottom">'
+                '<div class="fw-bold" style="flex:0 0 32%%;">' + name + '</div>'
+                '<div class="text-muted flex-grow-1 px-3">' + benefit + '</div>'
+                '<div><a class="btn btn-sm btn-secondary" target="_blank" '
+                'href="https://apps.odoo.com/apps/modules/' + series + '/' + tech + '">View on Odoo Apps</a></div>'
+                '</div>'
+            )
+        html = (
+            '<div class="alert alert-info" style="margin-bottom:16px;">'
+            'These paid add-ons extend Expodo Field Service. Each one installs on top of this engine and works across every trade.'
+            '</div>' + rows
+        )
+        for rec in self:
+            rec.addons_promo_html = html
